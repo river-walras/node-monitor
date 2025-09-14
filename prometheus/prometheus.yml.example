@@ -1,0 +1,22 @@
+# Prometheus 配置 - 使用基础认证
+
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+
+scrape_configs:
+  # Prometheus 自身监控
+  - job_name: 'prometheus'
+    static_configs:
+      - targets: ['localhost:9090']
+
+  # Node Exporter 监控（使用用户名密码认证）
+  - job_name: 'node-exporters'
+    basic_auth:
+      username: prometheus          # 替换为你设置的用户名
+      password: your_password      # 替换为你设置的密码
+    static_configs:
+      - targets: 
+        - 'host.docker.internal:9100'  # 替换为你的服务器 IP
+    scrape_interval: 15s
+    metrics_path: /metrics
